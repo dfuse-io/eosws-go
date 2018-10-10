@@ -22,7 +22,7 @@ type CommonOut struct {
 	Fetch        bool   `json:"fetch,omitempty"`
 	Listen       bool   `json:"listen,omitempty"`
 	StartBlock   int64  `json:"start_block,omitempty"`
-	WithProgress int64  `json:"with_progress,omitempty"`
+	WithProgress int64   `json:"with_progress,omitempty"`
 }
 
 func (c *CommonOut) SetType(v string)  { c.Type = v }
