@@ -86,7 +86,7 @@ func (c *Client) readLoop() {
 
 		if inspect.Type == "ping" {
 			pong := bytes.Replace(cnt, []byte(`"ping"`), []byte(`"pong"`), 1)
-			fmt.Println("eosws client: sending pong", string(pong))
+			//fmt.Println("eosws client: sending pong", string(pong))
 			_ = c.conn.WriteMessage(websocket.TextMessage, pong)
 			continue
 		}
