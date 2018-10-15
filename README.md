@@ -1,45 +1,28 @@
-eosws Go bindings (from the dfuse API)
+`eosws` Go bindings (from the [dfuse API](https://dfuse.io/))
 --------------------------------------
 
-Websocket consumer for the https://dfuse.io API on EOS networks.
+WebSocket consumer for the https://dfuse.io API on EOS networks.
 
-## Sample usage
+## Examples
 
-```go
-	client, err := eosws.New("wss://eosws.mainnet.eoscanada.com/v1/stream", "eyJ...nadacom", "https://origin.example.com")
-	errorCheck("connecting to endpoint", err)
+You will find a bunch of example scripts in the [examples](./examples) folder. Here the list
+of provided examples:
 
-	ga := &eosws.GetActions{}
-	ga.ReqID = "get-accounts-jsons"
-	ga.StartBlock = -5000
-	ga.Listen = true
-	ga.Data.Account = "accountsjson"
-	ga.Data.ActionName = "set"
+ * [Get all actions for a specific account](./examples/get-actions/main.go)
 
-	fmt.Println("Sending `get_actions` message")
-	err = client.Send(ga)
-	errorCheck("sending get_actions", err)
+### Instructions
 
-	for {
-		msg, err := client.Read()
-		errorCheck("reading message", err)
+All examples expect to have an API key being set in the `EOSWS_API_KEY` environment variable.
+To ease fiddling with the examples, copy the file `.envrc.dist` (at root of project) to a
+new file named `.envrc`. Edit the file to put your API key in the file.
 
-		switch m := msg.(type) {
-		case *eosws.ActionTrace:
-			fmt.Println(m.Data.Trace)
-		default:
-			fmt.Println("Unsupported message", m)
-		}
-	}
+Then install [direnv](https://direnv.net/) on your machine to auto-load the variable
+from your terminal when you `cd` in the directory.
+
+To run the examples, simply do the following:
+
+```
+go run ./examples/get-actions/main.go
 ```
 
-where:
-
-```go
-func errorCheck(prefix string, err error) {
-	if err != nil {
-		fmt.Printf("ERROR: %s: %s\n", prefix, err)
-		os.Exit(1)
-	}
-}
-```
+**Note** Of course, change `get-actions` to the actual example you want to test out.

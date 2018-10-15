@@ -39,8 +39,6 @@ type Client struct {
 	writeLock sync.Mutex
 }
 
-//
-
 func (c *Client) Read() (interface{}, error) {
 	select {
 	case el := <-c.incoming:
