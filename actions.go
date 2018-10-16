@@ -16,9 +16,9 @@ type GetActions struct {
 		Receiver                 string `json:"receiver,omitempty"`
 		Account                  string `json:"account"`
 		ActionName               string `json:"action_name,omitempty"`
-		WithDBOperations         bool   `json:"with_db_ops"`
-		WithRAMCosts             bool   `json:"with_ram_costs"`
-		WithDeferredTransactions bool   `json:"with_deferred"`
+		WithDBOperations         bool   `json:"with_db_ops"` // dbops
+		WithRAMCosts             bool   `json:"with_ram_costs"` // ramops
+		WithDeferredTransactions bool   `json:"with_deferred"` // dtrxops
 		WithInlineTraces         bool   `json:"with_inline_traces"`
 	} `json:"data"`
 }
@@ -33,7 +33,7 @@ type ActionTrace struct {
 		ActionDepth          int             `json:"depth"`
 		Trace                json.RawMessage `json:"trace"`
 		DBOperations         json.RawMessage `json:"dbops,omitempty"`
-		RAMConsumed          json.RawMessage `json:"rams,omitempty"`
-		DeferredTransactions json.RawMessage `json:"dtrxs,omitempty"`
+		RAMConsumed          json.RawMessage `json:"rams,omitempty"` // ramops
+		DeferredTransactions json.RawMessage `json:"dtrxs,omitempty"` // dtrxops
 	} `json:"data"`
 }
