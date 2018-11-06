@@ -12,7 +12,6 @@ type DBOp struct {
 }
 
 type DBRow struct {
-	Key   string      `json:"key,omitempty"`
 	Payer string      `json:"payer,omitempty"`
 	Hex   string      `json:"hex,omitempty"`
 	JSON  interface{} `json:"json,omitempty"`
