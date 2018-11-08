@@ -13,27 +13,27 @@ type GetActionTraces struct {
 	CommonOut
 
 	Data struct {
-		Receiver                 string `json:"receiver,omitempty"`
-		Account                  string `json:"account"`
-		ActionName               string `json:"action_name,omitempty"`
-		WithDBOperations         bool   `json:"with_db_ops"`    // dbops
-		WithRAMCosts             bool   `json:"with_ram_costs"` // ramops
-		WithDeferredTransactions bool   `json:"with_deferred"`  // dtrxops
-		WithInlineTraces         bool   `json:"with_inline_traces"`
+		Receiver         string `json:"receiver,omitempty"`
+		Account          string `json:"account"`
+		ActionName       string `json:"action_name,omitempty"`
+		WithDBOps        bool   `json:"with_dbops"`
+		WithRAMOps       bool   `json:"with_ramops"`
+		WithDTrxOps      bool   `json:"with_dtrxops"`
+		WithInlineTraces bool   `json:"with_inline_traces"`
 	} `json:"data"`
 }
 
 type ActionTrace struct {
 	CommonIn
 	Data struct {
-		BlockNum             uint32          `json:"block_num"`
-		BlockID              string          `json:"block_id"`
-		TransactionID        string          `json:"trx_id"`
-		ActionIndex          int             `json:"idx"`
-		ActionDepth          int             `json:"depth"`
-		Trace                json.RawMessage `json:"trace"`
-		DBOperations         json.RawMessage `json:"dbops,omitempty"`
-		RAMConsumed          json.RawMessage `json:"rams,omitempty"`  // ramops
-		DeferredTransactions json.RawMessage `json:"dtrxs,omitempty"` // dtrxops
+		BlockNum      uint32          `json:"block_num"`
+		BlockID       string          `json:"block_id"`
+		TransactionID string          `json:"trx_id"`
+		ActionIndex   int             `json:"idx"`
+		ActionDepth   int             `json:"depth"`
+		Trace         json.RawMessage `json:"trace"`
+		DBOps         json.RawMessage `json:"dbops,omitempty"`
+		RAMOps        json.RawMessage `json:"ramops,omitempty"`
+		DTrxOps       json.RawMessage `json:"dtrxops,omitempty"`
 	} `json:"data"`
 }
