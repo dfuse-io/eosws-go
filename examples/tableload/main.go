@@ -32,7 +32,7 @@ func main() {
 			ga.Data.JSON = true
 			ga.Data.Code = "eosio.token"
 			ga.Data.Scope = "eosio"
-			ga.Data.TableName = "accounts"
+			ga.Data.Table = "accounts"
 
 			fmt.Println("Sending `get_table_rows` message")
 			err = client.Send(ga)

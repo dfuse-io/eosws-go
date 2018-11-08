@@ -23,7 +23,7 @@ func main() {
 			//client, err := eosws.New("wss://kylin.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
 			errorCheck("connecting to endpoint", err)
 
-			ga := &eosws.GetActions{}
+			ga := &eosws.GetActionTraces{}
 			ga.ReqID = "1"
 			ga.StartBlock = -10
 			ga.Listen = true
