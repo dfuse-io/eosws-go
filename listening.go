@@ -1,7 +1,7 @@
 package eosws
 
 func init() {
-	RegisterIncomingMessage("listening", Progress{})
+	RegisterIncomingMessage("listening", Listening{})
 }
 
 type Listening struct {
