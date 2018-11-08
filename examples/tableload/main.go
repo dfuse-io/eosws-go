@@ -19,19 +19,19 @@ func main() {
 		j := i
 		go func() {
 			client, err := eosws.New("ws://localhost:8001/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
-			// client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
+			//client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
 			//client, err := eosws.New("wss://kylin.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
 			errorCheck("connecting to endpoint", err)
 
 			ga := &eosws.GetTableRows{}
 			ga.ReqID = "1"
-			ga.StartBlock = 3360000
+			ga.StartBlock = -6000
 			ga.Listen = true
 			ga.Fetch = true
 			ga.WithProgress = 5
 			ga.Data.JSON = true
 			ga.Data.Code = "eosio.token"
-			ga.Data.Scope = "eoscanadacom"
+			ga.Data.Scope = "eosio"
 			ga.Data.TableName = "accounts"
 
 			fmt.Println("Sending `get_table_rows` message")
