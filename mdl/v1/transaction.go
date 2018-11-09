@@ -66,6 +66,7 @@ type PermissionLevel struct {
 }
 
 type TransactionLifecycle struct {
+	TransactionStatus       string                 `json:"transaction_status"`
 	ID                      string                 `json:"id"`
 	Transaction             *eos.SignedTransaction `json:"transaction"`
 	ExecutionTrace          *TransactionTrace      `json:"execution_trace"`
