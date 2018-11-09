@@ -100,7 +100,7 @@ func Test_GetTableRowsListen(t *testing.T) {
 
 	ga := &GetTableRows{}
 	ga.ReqID = "1"
-	ga.StartBlock = -6000
+	ga.StartBlock = -3600
 	ga.Listen = true
 	ga.Fetch = false
 	ga.WithProgress = 5

@@ -24,7 +24,7 @@ func main() {
 			errorCheck("connecting to endpoint", err)
 
 			ga := &eosws.GetActionTraces{}
-			ga.ReqID = "1"
+			ga.ReqID = "foo GetActions"
 			ga.StartBlock = -10
 			ga.Listen = true
 			ga.WithProgress = 5

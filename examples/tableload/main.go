@@ -18,14 +18,14 @@ func main() {
 	for i := 0; i < COUNT; i++ {
 		j := i
 		go func() {
-			client, err := eosws.New("ws://localhost:8001/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
-			//client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
+			//client, err := eosws.New("ws://localhost:8001/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
+			client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
 			//client, err := eosws.New("wss://kylin.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
 			errorCheck("connecting to endpoint", err)
 
 			ga := &eosws.GetTableRows{}
-			ga.ReqID = "1"
-			ga.StartBlock = -6000
+			ga.ReqID = "foo GetTableRows"
+			ga.StartBlock = -3600
 			ga.Listen = true
 			ga.Fetch = true
 			ga.WithProgress = 5
@@ -55,6 +55,9 @@ func main() {
 					cnt, _ := json.Marshal(m)
 					fmt.Println(string(cnt))
 				case *eosws.TableSnapshot:
+					cnt, _ := json.Marshal(m)
+					fmt.Println(string(cnt))
+				case *eosws.Listening:
 					cnt, _ := json.Marshal(m)
 					fmt.Println(string(cnt))
 				default:
