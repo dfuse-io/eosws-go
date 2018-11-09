@@ -9,7 +9,7 @@ Websocket consumer for the https://dfuse.io API on EOS networks.
 	client, err := eosws.New("wss://eosws.mainnet.eoscanada.com/v1/stream", "eyJ...nadacom", "https://origin.example.com")
 	errorCheck("connecting to endpoint", err)
 
-	ga := &eosws.GetActions{}
+	ga := &eosws.GetActionTraces{}
 	ga.ReqID = "get-accounts-jsons"
 	ga.StartBlock = -5000
 	ga.Listen = true
