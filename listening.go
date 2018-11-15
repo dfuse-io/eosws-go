@@ -6,5 +6,7 @@ func init() {
 
 type Listening struct {
 	CommonOut
-	NextBlock uint32 `json:"data"`
+	Data struct {
+		NextBlock uint32 `json:"next_block"`
+	} `json:"data"`
 }

@@ -101,6 +101,9 @@ func (c *Client) readLoop() {
 		obj := reflect.New(objType).Interface()
 		err = json.Unmarshal(cnt, &obj)
 		if err != nil {
+
+			fmt.Printf("Error unmarshalling :%q :%s\n", inspect.Type, err)
+			fmt.Println("Data: ", string(cnt))
 			// LOG or push an error: "cannot unmarshal incoming message into our struct
 			//emitError(inspect.ReqID, "unmarshal_message", err, wsmsg.M{"type": inspect.Type})
 			continue

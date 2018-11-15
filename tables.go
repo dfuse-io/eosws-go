@@ -31,8 +31,7 @@ type TableDelta struct {
 	Data struct {
 		BlockNum uint32   `json:"block_num"`
 		DBOp     *v1.DBOp `json:"dbop"`
-		Redo     bool     `json:"redo,omitempty"`
-		Undo     bool     `json:"undo,omitempty"`
+		Step     string   `json:"step"`
 	} `json:"data"`
 }
 

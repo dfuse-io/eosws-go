@@ -1,21 +1,18 @@
 package eosws
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
+	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func Test_GetActions(t *testing.T) {
 
-	key := os.Getenv("EOSWS_API_KEY")
-	require.NotEqual(t, "", key)
-
-	client, err := New("wss://staging-kylin.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
-	require.NoError(t, err)
+	client := newClient(t)
 
 	ga := &GetActionTraces{}
 	ga.ReqID = "1"
@@ -26,38 +23,14 @@ func Test_GetActions(t *testing.T) {
 	ga.Data.WithInlineTraces = true
 
 	client.Send(ga)
-
-	for {
-		msg, err := client.Read()
-		if err != nil {
-			fmt.Println("DIED", err)
-			t.Fail()
-			return
-		}
-
-		switch m := msg.(type) {
-		case *ActionTrace:
-			cnt, _ := json.Marshal(m)
-			fmt.Println("cnt: ", string(cnt))
-			return
-		case *Listening:
-			break
-		default:
-			cnt, _ := json.Marshal(m)
-			fmt.Println("cnt: ", string(cnt))
-			t.Errorf("Invalid message: %T", m)
-		}
-
-	}
+	defer client.conn.Close()
+	expectMessage(t, client, &Listening{}, nil)
+	expectMessage(t, client, &ActionTrace{}, nil)
 }
 
 func Test_GetTableRowsFetch(t *testing.T) {
 
-	key := os.Getenv("EOSWS_API_KEY")
-	require.NotEqual(t, "", key)
-
-	client, err := New("wss://staging-kylin.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
-	require.NoError(t, err)
+	client := newClient(t)
 
 	ga := &GetTableRows{}
 	ga.ReqID = "1"
@@ -70,33 +43,15 @@ func Test_GetTableRowsFetch(t *testing.T) {
 	ga.Data.Scope = "eosio"
 	ga.Data.Table = "accounts"
 	client.Send(ga)
+	defer client.conn.Close()
 
-	for {
-		msg, err := client.Read()
-		if err != nil {
-			fmt.Println("DIED", err)
-			t.Fail()
-			return
-		}
+	expectMessage(t, client, &TableSnapshot{}, nil)
 
-		switch m := msg.(type) {
-		case *TableSnapshot:
-			cnt, _ := json.Marshal(m)
-			fmt.Println(string(cnt))
-			return
-		default:
-			t.Errorf("Invalid message: %T", m)
-		}
-	}
 }
 
 func Test_GetTableRowsListen(t *testing.T) {
 
-	key := os.Getenv("EOSWS_API_KEY")
-	require.NotEqual(t, "", key)
-
-	client, err := New("wss://staging-kylin.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
-	require.NoError(t, err)
+	client := newClient(t)
 
 	ga := &GetTableRows{}
 	ga.ReqID = "1"
@@ -109,25 +64,42 @@ func Test_GetTableRowsListen(t *testing.T) {
 	ga.Data.Scope = "eosio"
 	ga.Data.Table = "global"
 	client.Send(ga)
+	defer client.conn.Close()
 
-	for {
+	expectMessage(t, client, &Listening{}, nil)
+	expectMessage(t, client, &TableDelta{}, func(t *testing.T, msg interface{}) {
+		delta := msg.(*TableDelta)
+		assert.Equal(t, "1", delta.ReqID)
+		assert.NotEqual(t, "", delta.Data.Step)
+	})
 
-		msg, err := client.Read()
-		if err != nil {
-			fmt.Println("DIED", err)
-			t.Fail()
-			return
-		}
+}
 
-		switch m := msg.(type) {
-		case *TableDelta:
-			cnt, _ := json.Marshal(m)
-			fmt.Println(string(cnt))
-			return
-		case *Listening:
-			break
-		default:
-			t.Errorf("Invalid message: %T", m)
-		}
+func newClient(t *testing.T) *Client {
+	t.Helper()
+
+	key := os.Getenv("EOSWS_API_KEY")
+	require.NotEqual(t, "", key)
+
+	client, err := New("wss://staging-kylin.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
+	require.NoError(t, err)
+
+	return client
+}
+
+func expectMessage(t *testing.T, client *Client, messageType interface{}, validation func(t *testing.T, msg interface{})) {
+	msg, err := client.Read()
+	if err != nil {
+		fmt.Println("DIED", err)
+		t.Fail()
+		return
 	}
+
+	msgType := reflect.TypeOf(msg).String()
+	require.Equal(t, reflect.TypeOf(messageType).String(), msgType)
+
+	if validation != nil {
+		validation(t, msg)
+	}
+
 }
