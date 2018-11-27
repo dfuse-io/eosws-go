@@ -13,8 +13,8 @@ Websocket consumer for the https://dfuse.io API on EOS networks.
 	ga.ReqID = "get-accounts-jsons"
 	ga.StartBlock = -5000
 	ga.Listen = true
-	ga.Data.Account = "accountsjson"
-	ga.Data.ActionName = "set"
+	ga.Data.Accounts = "accountsjson"
+	ga.Data.ActionNames = "set"
 
 	fmt.Println("Sending `get_actions` message")
 	err = client.Send(ga)

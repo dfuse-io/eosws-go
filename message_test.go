@@ -18,8 +18,8 @@ func Test_GetActions(t *testing.T) {
 	ga.ReqID = "1"
 	ga.StartBlock = -10
 	ga.Listen = true
-	ga.Data.Account = "eosio.token"
-	ga.Data.ActionName = "transfer"
+	ga.Data.Accounts = "eosio.token"
+	ga.Data.ActionNames = "transfer"
 	ga.Data.WithInlineTraces = true
 
 	client.Send(ga)

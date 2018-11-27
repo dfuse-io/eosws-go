@@ -28,8 +28,8 @@ func main() {
 			ga.StartBlock = -10
 			ga.Listen = true
 			ga.WithProgress = 5
-			ga.Data.Account = "eosio.token"
-			ga.Data.ActionName = "transfer"
+			ga.Data.Accounts = "eosio.token"
+			ga.Data.ActionNames = "transfer"
 			ga.Data.WithInlineTraces = true
 
 			fmt.Println("Sending `get_actions` message")

@@ -13,8 +13,11 @@ type GetActionTraces struct {
 	CommonOut
 
 	Data struct {
+		Receivers        string `json:"receivers,omitempty"`
+		Accounts         string `json:"accounts"`
+		ActionNames      string `json:"action_names,omitempty"`
 		Receiver         string `json:"receiver,omitempty"`
-		Account          string `json:"account"`
+		Account          string `json:"account,omitempty"`
 		ActionName       string `json:"action_name,omitempty"`
 		WithDBOps        bool   `json:"with_dbops"`
 		WithRAMOps       bool   `json:"with_ramops"`
