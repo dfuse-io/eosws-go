@@ -51,6 +51,10 @@ func (c *Client) Read() (interface{}, error) {
 	}
 }
 
+func (c *Client) Close() error {
+	return c.conn.Close()
+}
+
 func (c *Client) readLoop() {
 	var err error
 	var msgType int
