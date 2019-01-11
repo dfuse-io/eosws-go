@@ -5,9 +5,10 @@ import (
 )
 
 type Block struct {
-	ID           string       `json:"id"`
-	Irreversible bool         `json:"irreversible"`
-	Header       *BlockHeader `json:"header"`
+	ID               string       `json:"id"`
+	Irreversible     bool         `json:"irreversible"`
+	Header           *BlockHeader `json:"header"`
+	TransactionCount int          `json:"transaction_count"`
 }
 
 type BlockHeader struct {
