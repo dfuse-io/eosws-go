@@ -90,6 +90,6 @@ type ActionRef struct {
 }
 
 type TransactionList struct {
-	NextCursor   string
-	Transactions []*TransactionLifecycle
+	NextCursor   string                  `json:"next_cursor"`
+	Transactions []*TransactionLifecycle `json:"transactions"`
 }
