@@ -26,11 +26,11 @@ type TransactionTrace struct {
 type ActionReceipt struct {
 	Receiver       string            `json:"receiver"`
 	Digest         string            `json:"act_digest"`
-	GlobalSequence uint64            `json:"global_sequence"`
+	GlobalSequence eos.Uint64        `json:"global_sequence"`
 	AuthSequence   []json.RawMessage `json:"auth_sequence"`
-	RecvSequence   uint64            `json:"recv_sequence"`
-	CodeSequence   int32             `json:"code_sequence"`
-	ABISequence    int32             `json:"abi_sequence"`
+	RecvSequence   eos.Uint64        `json:"recv_sequence"`
+	CodeSequence   eos.Uint64        `json:"code_sequence"`
+	ABISequence    eos.Uint64        `json:"abi_sequence"`
 }
 
 // BaseActionTrace corresponds to a `base_action_trace` from `chain/trace.hpp`
