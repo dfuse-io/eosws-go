@@ -16,7 +16,7 @@ type HeadInfo struct {
 		HeadBlockId 				string 		`json:"head_block_id"`
 		HeadBlockTime				time.Time	`json:"head_block_time"`
 		HeadBlockProducer 			string 		`json:"head_block_producer"`
-	}
+	} `json:"data"`
 }
 
 type GetHeadInfo struct {
