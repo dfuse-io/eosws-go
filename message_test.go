@@ -10,7 +10,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var runEndToEndTests = os.Getenv("DFUSE_API_TOKEN") != ""
+
 func Test_GetActions(t *testing.T) {
+	if !runEndToEndTests {
+		t.Skip("skipping end to end tests as the EOSWS_API_KEY is not set")
+	}
 
 	client := newClient(t)
 
@@ -29,6 +34,9 @@ func Test_GetActions(t *testing.T) {
 }
 
 func Test_GetTableRowsFetch(t *testing.T) {
+	if !runEndToEndTests {
+		t.Skip("skipping end to end tests as the EOSWS_API_KEY is not set")
+	}
 
 	client := newClient(t)
 
@@ -50,6 +58,9 @@ func Test_GetTableRowsFetch(t *testing.T) {
 }
 
 func Test_GetTableRowsListen(t *testing.T) {
+	if !runEndToEndTests {
+		t.Skip("skipping end to end tests as the EOSWS_API_KEY is not set")
+	}
 
 	client := newClient(t)
 
@@ -78,10 +89,10 @@ func Test_GetTableRowsListen(t *testing.T) {
 func newClient(t *testing.T) *Client {
 	t.Helper()
 
-	key := os.Getenv("EOSWS_API_KEY")
+	key := os.Getenv("DFUSE_API_TOKEN")
 	require.NotEqual(t, "", key)
 
-	client, err := New("wss://staging-kylin.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
+	client, err := New("wss://staging-mainnet.eos.dfuse.io/v1/stream", key, "https://origin.example.com")
 	require.NoError(t, err)
 
 	return client
