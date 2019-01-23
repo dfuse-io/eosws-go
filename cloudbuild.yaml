@@ -1,0 +1,4 @@
+steps:
+  - name: 'gcr.io/cloud-builders/go:alpine'
+    args: ['test', '-v', './...']
+    env: ['PROJECT_ROOT=github.com/dfuse-io/eosws-go']
