@@ -16,5 +16,7 @@ type GetTrxLifecycle struct {
 
 type TrxLifecycle struct {
 	CommonIn
-	Data *mdl.TransactionLifecycle `json:"data"`
+	Data struct{
+		Lifecycle *mdl.TransactionLifecycle `json:"lifecycle"`
+	} `json:"data"`
 }
