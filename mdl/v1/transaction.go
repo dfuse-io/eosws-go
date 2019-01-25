@@ -3,7 +3,7 @@ package mdl
 import (
 	"encoding/json"
 
-	eos "github.com/eoscanada/eos-go"
+	"github.com/eoscanada/eos-go"
 	"github.com/eoscanada/eos-go/ecc"
 )
 
@@ -87,4 +87,9 @@ type ActionRef struct {
 	TrxIndex    int    `json:"trx_index"`
 	TrxID       string `json:"trx_id"`
 	ActionIndex int    `json:"action_index"`
+}
+
+type TransactionList struct {
+	NextCursor   string                  `json:"next_cursor"`
+	Transactions []*TransactionLifecycle `json:"transactions"`
 }
