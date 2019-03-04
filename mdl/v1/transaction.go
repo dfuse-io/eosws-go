@@ -72,8 +72,10 @@ type TransactionLifecycle struct {
 	ExecutionTrace          *TransactionTrace      `json:"execution_trace"`
 	ExecutionBlockHeader    *eos.BlockHeader       `json:"execution_block_header"`
 	DTrxOps                 []*DTrxOp              `json:"dtrxops"`
+	CreationTree            CreationFlatTree       `json:"creation_tree"`
 	DBOps                   []*DBOp                `json:"dbops"`
 	RAMOps                  []*RAMOp               `json:"ramops"`
+	TableOps                []*TableOp             `json:"tableops"`
 	PubKeys                 []*ecc.PublicKey       `json:"pub_keys"`
 	CreatedBy               *ExtDTrxOp             `json:"created_by"`
 	CanceledBy              *ExtDTrxOp             `json:"canceled_by"`
@@ -88,3 +90,6 @@ type ActionRef struct {
 	TrxID       string `json:"trx_id"`
 	ActionIndex int    `json:"action_index"`
 }
+
+type CreationFlatTree = []CreationFlatNode
+type CreationFlatNode = [3]int
