@@ -12,17 +12,17 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func Auth(apiKey string) (string, error) {
+func Auth(apiKey string) (token string, expiration time.Time, err error) {
 	resp, err := http.Post("https://auth.dfuse.io/v1/auth/issue", "application/json", bytes.NewBuffer([]byte(fmt.Sprintf(`{"api_key":"%s"}`, apiKey))))
 	if err != nil {
-		return "", err
+		return token, expiration, err
 	}
 	if resp.StatusCode != 200 {
-		return "", fmt.Errorf("wrong status code from Auth", resp.StatusCode)
+		return token, expiration, fmt.Errorf("wrong status code from Auth: %d", resp.StatusCode)
 	}
 	var result apiToJWTResp
 	json.NewDecoder(resp.Body).Decode(&result)
-	return result.Token, nil
+	return result.Token, time.Unix(result.ExpiresAt, 0), nil
 }
 
 func New(endpoint, token, origin string) (*Client, error) {
