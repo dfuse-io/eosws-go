@@ -12,6 +12,19 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+func Auth(apiKey string) (string, error) {
+	resp, err := http.Post("https://auth.dfuse.io/v1/auth/issue", "application/json", bytes.NewBuffer([]byte(fmt.Sprintf(`{"api_key":"%s"}`, apiKey))))
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("wrong status code from Auth", resp.StatusCode)
+	}
+	var result apiToJWTResp
+	json.NewDecoder(resp.Body).Decode(&result)
+	return result.Token, nil
+}
+
 func New(endpoint, token, origin string) (*Client, error) {
 	endpoint = fmt.Sprintf("%s?token=%s", endpoint, token)
 	reqHeaders := http.Header{"Origin": []string{origin}}
@@ -133,4 +146,9 @@ func (c *Client) Send(msg OutgoingMessager) error {
 	}
 
 	return nil
+}
+
+type apiToJWTResp struct {
+	Token     string `json:"token"`
+	ExpiresAt int64  `json:"expires_at"`
 }
