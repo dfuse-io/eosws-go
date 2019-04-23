@@ -1,67 +1,73 @@
 package main
 
 import (
-	"encoding/json"
-	"flag"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
 	eosws "github.com/dfuse-io/eosws-go"
 )
 
+var dfuse_endpoint = "wss://mainnet.eos.dfuse.io/v1/stream"
+var origin = "https://origin.example.com"
+
 func main() {
-	flag.Parse()
 
-	COUNT := 1
-
-	for i := 0; i < COUNT; i++ {
-		j := i
-		go func() {
-			// client, err := eosws.New("ws://localhost:8001/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
-			client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
-			//client, err := eosws.New("wss://kylin.eos.dfuse.io/v1/stream", os.Getenv("EOSWS_API_KEY"), "https://origin.example.com")
-			errorCheck("connecting to endpoint", err)
-
-			ga := &eosws.GetActionTraces{}
-			ga.ReqID = "foo GetActions"
-			ga.StartBlock = -10
-			ga.Listen = true
-			ga.WithProgress = 5
-			ga.Data.Accounts = "eosio.token"
-			ga.Data.ActionNames = "transfer"
-			ga.Data.WithInlineTraces = true
-
-			fmt.Println("Sending `get_actions` message")
-			err = client.Send(ga)
-			errorCheck("sending get_actions", err)
-
-			for {
-				msg, err := client.Read()
-				if err != nil {
-					fmt.Println("DIED", j, err)
-					return
-				}
-
-				switch m := msg.(type) {
-				case *eosws.ActionTrace:
-					cnt, _ := json.Marshal(m)
-					fmt.Println(string(cnt))
-				case *eosws.Progress:
-					fmt.Println("Progress", j, m.Data.BlockNum)
-				default:
-					fmt.Println("Unsupported message", m)
-				}
-			}
-		}()
+	api_key := os.Getenv("EOSWS_API_KEY")
+	if api_key == "" {
+		log.Fatalf("please set your API key to environment variable EOSWS_API_KEY")
 	}
 
-	time.Sleep(500 * time.Second)
+	jwt, _, err := eosws.Auth(api_key)
+	if err != nil {
+		log.Fatalf("cannot get JWT token: %s", err.Error())
+	}
+
+	client, err := eosws.New(dfuse_endpoint, jwt, origin)
+	errorCheck("connecting to endpoint"+dfuse_endpoint, err)
+
+	go func() {
+
+		ga := &eosws.GetActionTraces{}
+		ga.ReqID = "foo GetActions"
+		ga.StartBlock = -350
+		ga.Listen = true
+		ga.WithProgress = 5
+		ga.IrreversibleOnly = true
+		ga.Data.Accounts = "eosio.token"
+		ga.Data.ActionNames = "transfer"
+		ga.Data.WithInlineTraces = true
+
+		fmt.Printf("Sending `get_actions` message for accounts: %s and action names: %s", ga.Data.Accounts, ga.Data.ActionNames)
+		err = client.Send(ga)
+		errorCheck("sending get_actions", err)
+
+		for {
+			msg, err := client.Read()
+			if err != nil {
+				fmt.Println("DIED", err)
+				return
+			}
+
+			switch m := msg.(type) {
+			case *eosws.ActionTrace:
+				fmt.Println("Block Num:", m.Data.BlockNum, m.Data.TransactionID)
+			case *eosws.Progress:
+				fmt.Println("Progress", m.Data.BlockNum)
+			case *eosws.Listening:
+				fmt.Println("listening...")
+			default:
+				fmt.Println("Unsupported message", m)
+			}
+		}
+	}()
+
+	time.Sleep(8 * time.Second)
 }
 
 func errorCheck(prefix string, err error) {
 	if err != nil {
-		fmt.Printf("ERROR: %s: %s\n", prefix, err)
-		os.Exit(1)
+		log.Fatalf("ERROR: %s: %s\n", prefix, err)
 	}
 }

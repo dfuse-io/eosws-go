@@ -17,12 +17,13 @@ type MsgIn struct {
 }
 
 type CommonOut struct {
-	Type         string `json:"type"`
-	ReqID        string `json:"req_id,omitempty"`
-	Fetch        bool   `json:"fetch,omitempty"`
-	Listen       bool   `json:"listen,omitempty"`
-	StartBlock   int64  `json:"start_block,omitempty"`
-	WithProgress int64  `json:"with_progress,omitempty"`
+	Type             string `json:"type"`
+	ReqID            string `json:"req_id,omitempty"`
+	Fetch            bool   `json:"fetch,omitempty"`
+	Listen           bool   `json:"listen,omitempty"`
+	StartBlock       int64  `json:"start_block,omitempty"`
+	IrreversibleOnly bool   `json:"irreversible_only"`
+	WithProgress     int64  `json:"with_progress,omitempty"`
 }
 
 func (c *CommonOut) SetType(v string)  { c.Type = v }

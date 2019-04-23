@@ -3,23 +3,42 @@ eosws Go bindings (from the dfuse API)
 
 Websocket consumer for the https://dfuse.io API on EOS networks.
 
-## Sample usage
+## Connecting
 
 ```go
-	client, err := eosws.New("wss://eosws.mainnet.eoscanada.com/v1/stream", "eyJ...nadacom", "https://origin.example.com")
-	errorCheck("connecting to endpoint", err)
+    jwt, exp, err := eosws.Auth("server_1234567....")
+    if err != nil {
+        log.Fatalf("cannot get auth token: %s", err.Error())
+    }
+    time.AfterFunc(time.Until(exp), log.Println("JWT is now expired, renew it before reconnecting client")) // make sure that you handle updating your JWT
 
-	ga := &eosws.GetActionTraces{}
-	ga.ReqID = "get-accounts-jsons"
-	ga.StartBlock = -5000
-	ga.Listen = true
-	ga.Data.Accounts = "accountsjson"
-	ga.Data.ActionNames = "set"
+	client, err := eosws.New("wss://mainnet.eos.dfuse.io/v1/stream", jwt, "https://origin.example.com")
+    if err != nil {
+        log.Fatalf("cannot connect to dfuse endpoint: %s", err.Error())
+    }
+```
 
-	fmt.Println("Sending `get_actions` message")
+## Sending requests
+
+```go
+	ga := &eosws.GetActionTraces{
+		ga := &eosws.GetActionTraces{
+			ReqID:      "myreq1",
+			StartBlock: -5,
+			Listen:     true,
+		}
+	}
+	ga.Data.Accounts = "eosio"
+	ga.Data.ActionNames = "onblock"
 	err = client.Send(ga)
-	errorCheck("sending get_actions", err)
+	if err != nil {
+		log.Fatalf("error sending request")
+    }
+```
 
+## Reading responses
+
+```go
 	for {
 		msg, err := client.Read()
 		errorCheck("reading message", err)
@@ -29,17 +48,11 @@ Websocket consumer for the https://dfuse.io API on EOS networks.
 			fmt.Println(m.Data.Trace)
 		default:
 			fmt.Println("Unsupported message", m)
+			break
 		}
 	}
 ```
 
-where:
+## Examples
 
-```go
-func errorCheck(prefix string, err error) {
-	if err != nil {
-		fmt.Printf("ERROR: %s: %s\n", prefix, err)
-		os.Exit(1)
-	}
-}
-```
+See `examples` folder
