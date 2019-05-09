@@ -13,7 +13,11 @@ import (
 )
 
 func Auth(apiKey string) (token string, expiration time.Time, err error) {
-	resp, err := http.Post("https://auth.dfuse.io/v1/auth/issue", "application/json", bytes.NewBuffer([]byte(fmt.Sprintf(`{"api_key":"%s"}`, apiKey))))
+	return AuthWithURL(apiKey, "https://auth.dfuse.io/v1/auth/issue")
+}
+
+func AuthWithURL(apiKey string, authServiceURL string) (token string, expiration time.Time, err error) {
+	resp, err := http.Post(authServiceURL, "application/json", bytes.NewBuffer([]byte(fmt.Sprintf(`{"api_key":"%s"}`, apiKey))))
 	if err != nil {
 		return token, expiration, err
 	}
@@ -21,7 +25,10 @@ func Auth(apiKey string) (token string, expiration time.Time, err error) {
 		return token, expiration, fmt.Errorf("wrong status code from Auth: %d", resp.StatusCode)
 	}
 	var result apiToJWTResp
-	json.NewDecoder(resp.Body).Decode(&result)
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return
+	}
 	return result.Token, time.Unix(result.ExpiresAt, 0), nil
 }
 
