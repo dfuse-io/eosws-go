@@ -66,22 +66,22 @@ type PermissionLevel struct {
 }
 
 type TransactionLifecycle struct {
-	TransactionStatus       string                 `json:"transaction_status"`
-	ID                      string                 `json:"id"`
-	Transaction             *eos.SignedTransaction `json:"transaction"`
-	ExecutionTrace          *TransactionTrace      `json:"execution_trace"`
-	ExecutionBlockHeader    *eos.BlockHeader       `json:"execution_block_header"`
-	DTrxOps                 []*DTrxOp              `json:"dtrxops"`
-	CreationTree            CreationFlatTree       `json:"creation_tree"`
-	DBOps                   []*DBOp                `json:"dbops"`
-	RAMOps                  []*RAMOp               `json:"ramops"`
-	TableOps                []*TableOp             `json:"tableops"`
-	PubKeys                 []*ecc.PublicKey       `json:"pub_keys"`
-	CreatedBy               *ExtDTrxOp             `json:"created_by"`
-	CanceledBy              *ExtDTrxOp             `json:"canceled_by"`
-	ExecutionIrreversible   bool                   `json:"execution_irreversible"`
-	CreationIrreversible    bool                   `json:"creation_irreversible"`
-	CancelationIrreversible bool                   `json:"cancelation_irreversible"`
+	TransactionStatus           string                 `json:"transaction_status"`
+	ID                          string                 `json:"id"`
+	Transaction                 *eos.SignedTransaction `json:"transaction"`
+	ExecutionTrace              *TransactionTrace      `json:"execution_trace"`
+	ExecutionBlockHeader        *eos.BlockHeader       `json:"execution_block_header"`
+	DTrxOps                     []*DTrxOp              `json:"dtrxops"`
+	CreationTree                CreationFlatTree       `json:"creation_tree"`
+	DBOps                       []*DBOp                `json:"dbops"`
+	RAMOps                      []*RAMOp               `json:"ramops"`
+	TableOps                    []*TableOp             `json:"tableops"`
+	PubKeys                     []*ecc.PublicKey       `json:"pub_keys"`
+	CreatedBy                   *ExtDTrxOp             `json:"created_by"`
+	CanceledBy                  *ExtDTrxOp             `json:"canceled_by"`
+	ExecutionIrreversible       bool                   `json:"execution_irreversible"`
+	DTrxCreationIrreversible    bool                   `json:"dtrx_creation_irreversible"`
+	DTrxCancelationIrreversible bool                   `json:"dtrx_cancelation_irreversible"`
 }
 
 type ActionRef struct {
