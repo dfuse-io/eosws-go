@@ -27,8 +27,8 @@ type ActionReceipt struct {
 	Receiver       string            `json:"receiver"`
 	Digest         string            `json:"act_digest"`
 	GlobalSequence eos.Uint64        `json:"global_sequence"`
-	AuthSequence   []json.RawMessage `json:"auth_sequence"`
 	RecvSequence   eos.Uint64        `json:"recv_sequence"`
+	AuthSequence   []json.RawMessage `json:"auth_sequence"`
 	CodeSequence   eos.Uint64        `json:"code_sequence"`
 	ABISequence    eos.Uint64        `json:"abi_sequence"`
 }
@@ -56,8 +56,12 @@ type AccountRAMDelta struct {
 
 // ActionTrace corresponds to an `action_trace` from `chain/trace.hpp`
 type ActionTrace struct {
+	ActionOrdinal                          uint32 `json:"action_ordinal"`
+	CreatorActionOrdinal                   uint32 `json:"creator_action_ordinal"`
+	ClosestUnnotifiedAncestorActionOrdinal uint32 `json:"closest_unnotified_ancestor_action_ordinal"`
 	BaseActionTrace
-	InlineTraces []*ActionTrace `json:"inline_traces"`
+	Receiver     eos.AccountName `json:"receiver,omitempty"`
+	InlineTraces []*ActionTrace  `json:"inline_traces"`
 }
 
 type PermissionLevel struct {
