@@ -2,7 +2,7 @@ module github.com/dfuse-io/eosws-go
 
 require (
 	github.com/eoscanada/eos-go v0.8.5
-	github.com/gorilla/websocket v1.4.0
+	github.com/gorilla/websocket v1.4.1
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/tidwall/gjson v1.9.3 // indirect
